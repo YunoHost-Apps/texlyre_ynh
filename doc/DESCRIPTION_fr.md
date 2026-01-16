@@ -1,0 +1,1 @@
+Une plateforme collaborative LaTeX en temps réel, axée sur le local, avec des fonctionnalités d'édition hors ligne. Conçue avec React, TypeScript et Yjs pour l'édition collaborative de documents.

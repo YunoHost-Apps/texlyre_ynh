@@ -1,0 +1,62 @@
+#:schema https://raw.githubusercontent.com/YunoHost/apps/main/schemas/manifest.v2.schema.json
+
+packaging_format = 2
+
+id = "texlyre"
+name = "TeXlyre"
+description.en = "LaTeX web editor with real-time collaboration"
+description.fr = "Éditeur web LaTeX avec collaboration en temps réel"
+
+version = "0.5.0~ynh1"
+
+maintainers = ["eric_G"]
+
+[upstream]
+license = "AGPL-3.0"
+website = "https://texlyre.github.io/"
+admindoc = "https://texlyre.github.io/docs/installation/"
+code = "https://github.com/TeXlyre/texlyre"
+
+[integration]
+yunohost = ">= 12.1.38"
+helpers_version = "2.1"
+architectures = "all"
+multi_instance = true
+
+ldap = false
+sso = false
+
+disk = "50M"
+ram.build = "50M"
+ram.runtime = "50M"
+
+[install]
+    [install.domain]
+    type = "domain"
+
+    [install.init_main_permission]
+    type = "group"
+    default = "visitors"
+
+[resources]
+
+    [resources.sources]
+
+    [resources.sources.main]
+
+    url = "https://github.com/TeXlyre/texlyre/archive/refs/tags/v0.5.0.tar.gz"
+    sha256 = "248dca07137fcd56ecb83e59241867d1f84806091d8dbe538544fc051121f850"
+    autoupdate.strategy = "latest_github_tag"
+
+    [resources.system_user]
+
+    [resources.install_dir]
+
+    [resources.permissions]
+    main.url = "/"
+
+    [resources.ports]
+    main.default = 4173
+
+    [resources.nodejs]
+    version = "22"
