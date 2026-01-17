@@ -7,13 +7,6 @@
 source /usr/share/yunohost/helpers
 
 #=================================================
-# STOP SYSTEMD SERVICE
-#=================================================
-ynh_script_progression "Stopping $app's systemd service..."
-
-ynh_systemctl --service="$app" --action="stop"
-
-#=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
 ynh_script_progression "Upgrading source files..."
@@ -27,26 +20,21 @@ ynh_script_progression "Upgrading system configurations related to $app..."
 
 ynh_config_add_nginx
 
-ynh_config_add_systemd
-
-yunohost service add "$app" --description="LaTeX web editor" --log="/var/log/$app/$app.log"
-
 #=================================================
 # INSTALL APP
 #=================================================
 ynh_script_progression "Installing the app..."
 
 pushd "$install_dir"
- 	ynh_hide_warnings ynh_exec_as_app npm install
- 	ynh_hide_warnings ynh_exec_as_app npm run build:prod
+  ynh_hide_warnings ynh_exec_as_app npm install
+
+  ynh_replace_regex --match="baseUrl: '.*'," --replace="baseUrl: '$(ynh_normalize_url_path $path)'," --file=texlyre.config.ts
+
+  ynh_hide_warnings ynh_exec_as_app npm run build:prod
 popd
 
-#=================================================
-# START SYSTEMD SERVICE
-#=================================================
-ynh_script_progression "Starting $app's systemd service..."
-
-ynh_systemctl --service="$app" --action="start"
+chown $app:www-data $install_dir
+chown $app:www-data -R $install_dir/dist
 
 #=================================================
 # END OF SCRIPT
